@@ -8,8 +8,8 @@ import { AppSidebar } from "@/components/app-sidebar"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Internal Tools",
-  description: "Internal tools dashboard",
+  title: "Rintr Tools",
+  description: "Rintr tools dashboard",
 }
 
 export default function RootLayout({
