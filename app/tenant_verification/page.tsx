@@ -18,7 +18,7 @@ export default function Tool1Page() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbPage>Tool 1</BreadcrumbPage>
+                <BreadcrumbPage>Tenant Verification</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>

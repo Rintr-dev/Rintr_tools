@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Settings, Wrench } from 'lucide-react'
+import { Settings, Shield, Home, UserCheck, Video } from 'lucide-react'
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -21,15 +21,25 @@ import { ThemeToggle } from "./theme-toggle"
 
 const tools = [
   {
-    title: "Tool 1",
-    url: "/tool1",
-    icon: Wrench,
+    title: "Tenant Verification",
+    url: "/tenant_verification",
+    icon: Shield,
   },
   {
-    title: "Tool 2", 
-    url: "/tool2",
-    icon: Settings,
+    title: "Property Recommendations",
+    url: "/property_recommendations",
+    icon: Home,
   },
+  {
+    title: "Tenant Match",
+    url: "/tenant_match",
+    icon: UserCheck,
+  },
+  {
+    title: "One Way Interviews",
+    url: "/one_way_interviews",
+    icon: Video,
+  }
 ]
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -40,7 +50,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <div className="flex items-center gap-2 px-2 py-2">
           <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-            <Wrench className="size-4" />
+            <Shield className="size-4" />
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">
             <span className="truncate font-semibold">Internal Tools</span>

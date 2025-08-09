@@ -18,7 +18,7 @@ export default function Tool2Page() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbPage>Tool 2</BreadcrumbPage>
+                <BreadcrumbPage>Property Recommendation</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>

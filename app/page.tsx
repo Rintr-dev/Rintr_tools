@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation"
 
 export default function HomePage() {
-  redirect("/tool1")
+  redirect("/tenant_verification")
 }
