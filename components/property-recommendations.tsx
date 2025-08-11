@@ -42,12 +42,12 @@ type SearchForm = z.infer<typeof searchSchema>
 const mockListings = [
   {
     id: 1,
-    country: "Australia",
-    region: "Victoria",
-    district: "Melbourne",
-    suburb: "Richmond",
-    address: "123 Swan Street",
-    postcode: "3121",
+    country: "New Zealand",
+    region: "Wellington",
+    district: "Wellington City",
+    suburb: "Te Aro",
+    address: "123 Courtenay Place",
+    postcode: "6011",
     apartmentCode: "12A",
     propertyType: "apartment",
     pricePerWeek: 450,
@@ -57,17 +57,17 @@ const mockListings = [
     carSpaces: 1,
     petsAllowed: false,
     availableFrom: "15-03-2024",
-    features: ["Air Conditioning", "Balcony", "Dishwasher", "Built-in Wardrobes", "Gym"],
+    features: ["Heat Pump", "Balcony", "Dishwasher", "Built-in Wardrobes", "Gym"],
     score: 95,
   },
   {
     id: 2,
-    country: "Australia",
-    region: "Victoria",
-    district: "Melbourne",
-    suburb: "South Yarra",
-    address: "456 Toorak Road",
-    postcode: "3141",
+    country: "New Zealand",
+    region: "Wellington",
+    district: "Wellington City",
+    suburb: "Mount Victoria",
+    address: "456 Kent Terrace",
+    postcode: "6011",
     propertyType: "apartment",
     pricePerWeek: 520,
     bondAmount: 2080,
@@ -76,17 +76,17 @@ const mockListings = [
     carSpaces: 1,
     petsAllowed: true,
     availableFrom: "01-04-2024",
-    features: ["Pool", "Concierge", "Air Conditioning", "Balcony", "Storage"],
+    features: ["Pool", "Concierge", "Heat Pump", "Balcony", "Storage"],
     score: 88,
   },
   {
     id: 3,
-    country: "Australia",
-    region: "Victoria",
-    district: "Melbourne",
-    suburb: "Carlton",
-    address: "789 Lygon Street",
-    postcode: "3053",
+    country: "New Zealand",
+    region: "Wellington",
+    district: "Wellington City",
+    suburb: "Thorndon",
+    address: "789 Mulgrave Street",
+    postcode: "6011",
     propertyType: "house",
     pricePerWeek: 650,
     bondAmount: 2600,
@@ -95,17 +95,17 @@ const mockListings = [
     carSpaces: 2,
     petsAllowed: true,
     availableFrom: "20-03-2024",
-    features: ["Garden", "Fireplace", "Dishwasher", "Air Conditioning", "Study Room"],
+    features: ["Garden", "Fireplace", "Dishwasher", "Heat Pump", "Study Room"],
     score: 92,
   },
   {
     id: 4,
-    country: "Australia",
-    region: "Victoria",
-    district: "Melbourne",
-    suburb: "Fitzroy",
-    address: "321 Brunswick Street",
-    postcode: "3065",
+    country: "New Zealand",
+    region: "Wellington",
+    district: "Wellington City",
+    suburb: "Cuba Street",
+    address: "321 Cuba Street",
+    postcode: "6011",
     propertyType: "townhouse",
     pricePerWeek: 580,
     bondAmount: 2320,
@@ -114,17 +114,17 @@ const mockListings = [
     carSpaces: 1,
     petsAllowed: false,
     availableFrom: "10-04-2024",
-    features: ["Courtyard", "Modern Kitchen", "Air Conditioning", "Storage", "Laundry"],
+    features: ["Courtyard", "Modern Kitchen", "Heat Pump", "Storage", "Laundry"],
     score: 85,
   },
   {
     id: 5,
-    country: "Australia",
-    region: "Victoria",
-    district: "Melbourne",
-    suburb: "St Kilda",
-    address: "654 Acland Street",
-    postcode: "3182",
+    country: "New Zealand",
+    region: "Wellington",
+    district: "Wellington City",
+    suburb: "Oriental Bay",
+    address: "654 Oriental Parade",
+    postcode: "6011",
     apartmentCode: "5B",
     propertyType: "apartment",
     pricePerWeek: 480,
@@ -134,7 +134,7 @@ const mockListings = [
     carSpaces: 0,
     petsAllowed: false,
     availableFrom: "25-03-2024",
-    features: ["Beach Views", "Balcony", "Modern Kitchen", "Air Conditioning"],
+    features: ["Harbour Views", "Balcony", "Modern Kitchen", "Heat Pump"],
     score: 78,
   },
 ]
@@ -209,8 +209,8 @@ export function PropertyRecommendations() {
   }
 
   const searchProperties = (data: SearchForm) => {
-    // Simulate search with mock data
-    const filteredResults = mockListings.filter((listing) => {
+    // First try to find exact matches
+    const exactMatches = mockListings.filter((listing) => {
       return data.properties.some((property) => {
         const matchesCountry =
           !property.country || listing.country.toLowerCase().includes(property.country.toLowerCase())
@@ -235,15 +235,64 @@ export function PropertyRecommendations() {
       })
     })
 
-    // Sort by priority-based scoring (simplified)
-    const sortedResults = filteredResults.sort((a, b) => b.score - a.score)
+    // If no exact matches, return all listings with adjusted scores
+    let resultsToShow = exactMatches.length > 0 ? exactMatches : mockListings
 
-    setSearchResults(sortedResults)
+    // Calculate match scores for better ranking
+    const scoredResults = resultsToShow.map((listing) => {
+      let matchScore = listing.score // Base score
+      
+      // Adjust score based on how well it matches the first property criteria
+      const firstProperty = data.properties[0]
+      if (firstProperty) {
+        // Location bonuses
+        if (firstProperty.country && listing.country.toLowerCase().includes(firstProperty.country.toLowerCase())) {
+          matchScore += 5
+        }
+        if (firstProperty.region && listing.region.toLowerCase().includes(firstProperty.region.toLowerCase())) {
+          matchScore += 5
+        }
+        
+        // Price range bonus
+        if (listing.pricePerWeek >= firstProperty.minPrice && listing.pricePerWeek <= firstProperty.maxPrice) {
+          matchScore += 10
+        }
+        
+        // Property type exact match
+        if (firstProperty.propertyType && listing.propertyType === firstProperty.propertyType) {
+          matchScore += 8
+        }
+        
+        // Bedroom/bathroom matches
+        if (listing.bedrooms >= firstProperty.bedrooms) {
+          matchScore += 3
+        }
+        if (listing.bathrooms >= firstProperty.bathrooms) {
+          matchScore += 3
+        }
+      }
+
+      return { ...listing, matchScore }
+    })
+
+    // Sort by match score (prioritized) then original score
+    const sortedResults = scoredResults.sort((a, b) => {
+      if (a.matchScore !== b.matchScore) {
+        return b.matchScore - a.matchScore
+      }
+      return b.score - a.score
+    })
+
+    // Always show at least 3 results if available
+    const finalResults = sortedResults.slice(0, Math.max(3, sortedResults.length))
+
+    setSearchResults(finalResults)
     setHasSearched(true)
 
+    const matchType = exactMatches.length > 0 ? "exact matches" : "closest matches"
     toast({
       title: "Search Complete",
-      description: `Found ${sortedResults.length} matching properties`,
+      description: `Found ${finalResults.length} ${matchType}`,
     })
   }
 
@@ -341,22 +390,22 @@ export function PropertyRecommendations() {
                 <div className="space-y-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0">
                   <div className="space-y-2">
                     <Label className="text-sm font-medium">Country</Label>
-                    <Input {...form.register(`properties.${index}.country`)} placeholder="e.g., Australia" className="text-sm" />
+                    <Input {...form.register(`properties.${index}.country`)} placeholder="e.g., New Zealand" className="text-sm" />
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium">Region</Label>
-                    <Input {...form.register(`properties.${index}.region`)} placeholder="e.g., Victoria" className="text-sm" />
+                    <Input {...form.register(`properties.${index}.region`)} placeholder="e.g., Wellington" className="text-sm" />
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium">District</Label>
-                    <Input {...form.register(`properties.${index}.district`)} placeholder="e.g., Melbourne" className="text-sm" />
+                    <Input {...form.register(`properties.${index}.district`)} placeholder="e.g., Wellington City" className="text-sm" />
                   </div>
                 </div>
 
                 <div className="space-y-4 sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0">
                   <div className="space-y-2">
                     <Label className="text-sm font-medium">Suburb</Label>
-                    <Input {...form.register(`properties.${index}.suburb`)} placeholder="e.g., Richmond" className="text-sm" />
+                    <Input {...form.register(`properties.${index}.suburb`)} placeholder="e.g., Te Aro" className="text-sm" />
                   </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium">Property Type</Label>

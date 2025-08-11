@@ -46,11 +46,11 @@ const mockTenants = [
     firstName: "Sarah",
     lastName: "Johnson",
     email: "sarah.johnson@email.com",
-    phone: "+61 412 345 678",
+    phone: "+64 21 345 678",
     age: 28,
     occupation: "Software Engineer",
     income: 95000,
-    preferredLocation: ["Richmond", "South Yarra", "Carlton"],
+    preferredLocation: ["Te Aro", "Mount Victoria", "Thorndon"],
     maxBudget: 500,
     minBedrooms: 2,
     minBathrooms: 1,
@@ -72,11 +72,11 @@ const mockTenants = [
     firstName: "Michael",
     lastName: "Chen",
     email: "m.chen@email.com",
-    phone: "+61 423 456 789",
+    phone: "+64 21 456 789",
     age: 32,
     occupation: "Marketing Manager",
     income: 78000,
-    preferredLocation: ["Fitzroy", "Carlton", "Brunswick"],
+    preferredLocation: ["Cuba Street", "Thorndon", "Kelburn"],
     maxBudget: 450,
     minBedrooms: 1,
     minBathrooms: 1,
@@ -98,11 +98,11 @@ const mockTenants = [
     firstName: "Emma",
     lastName: "Williams",
     email: "emma.w@email.com",
-    phone: "+61 434 567 890",
+    phone: "+64 21 567 890",
     age: 25,
     occupation: "Nurse",
     income: 72000,
-    preferredLocation: ["St Kilda", "South Melbourne", "Port Melbourne"],
+    preferredLocation: ["Oriental Bay", "Mount Victoria", "Newtown"],
     maxBudget: 480,
     minBedrooms: 1,
     minBathrooms: 1,
@@ -124,11 +124,11 @@ const mockTenants = [
     firstName: "David",
     lastName: "Thompson",
     email: "d.thompson@email.com",
-    phone: "+61 445 678 901",
+    phone: "+64 21 678 901",
     age: 35,
     occupation: "Accountant",
     income: 85000,
-    preferredLocation: ["Richmond", "Hawthorn", "Camberwell"],
+    preferredLocation: ["Te Aro", "Thorndon", "Kelburn"],
     maxBudget: 550,
     minBedrooms: 2,
     minBathrooms: 2,
@@ -150,11 +150,11 @@ const mockTenants = [
     firstName: "Lisa",
     lastName: "Rodriguez",
     email: "lisa.rodriguez@email.com",
-    phone: "+61 456 789 012",
+    phone: "+64 21 789 012",
     age: 29,
     occupation: "Teacher",
     income: 68000,
-    preferredLocation: ["Carlton", "Fitzroy", "Collingwood"],
+    preferredLocation: ["Thorndon", "Cuba Street", "Island Bay"],
     maxBudget: 420,
     minBedrooms: 1,
     minBathrooms: 1,
@@ -202,8 +202,8 @@ export function TenantMatching() {
   })
 
   const searchTenants = (data: PropertyForm) => {
-    // Simulate tenant matching with mock data
-    const matchedTenants = mockTenants.filter((tenant) => {
+    // First try to find exact matches
+    const exactMatches = mockTenants.filter((tenant) => {
       const locationMatch = tenant.preferredLocation.some((location) =>
         location.toLowerCase().includes(data.suburb.toLowerCase()),
       )
@@ -216,15 +216,65 @@ export function TenantMatching() {
       return locationMatch && budgetMatch && bedroomMatch && bathroomMatch && parkingMatch && petMatch
     })
 
-    // Sort by match score (in a real app, this would be calculated based on multiple factors)
-    const sortedResults = matchedTenants.sort((a, b) => b.matchScore - a.matchScore)
+    // If no exact matches, return all tenants with adjusted scores
+    let resultsToShow = exactMatches.length > 0 ? exactMatches : mockTenants
 
-    setSearchResults(sortedResults)
+    // Calculate match scores for better ranking
+    const scoredResults = resultsToShow.map((tenant) => {
+      let adjustedScore = tenant.matchScore // Base match score
+      
+      // Adjust score based on how well tenant matches the property
+      const locationMatch = tenant.preferredLocation.some((location) =>
+        location.toLowerCase().includes(data.suburb.toLowerCase()),
+      )
+      if (locationMatch) {
+        adjustedScore += 10
+      }
+      
+      // Budget compatibility
+      if (tenant.maxBudget >= data.pricePerWeek) {
+        adjustedScore += 8
+      }
+      
+      // Room requirements
+      if (tenant.minBedrooms <= data.bedrooms) {
+        adjustedScore += 5
+      }
+      if (tenant.minBathrooms <= data.bathrooms) {
+        adjustedScore += 3
+      }
+      
+      // Parking requirements
+      if (!tenant.needsParking || data.carSpaces > 0) {
+        adjustedScore += 4
+      }
+      
+      // Pet compatibility
+      if (!tenant.hasPets || data.petsAllowed) {
+        adjustedScore += 6
+      }
+
+      return { ...tenant, adjustedScore }
+    })
+
+    // Sort by adjusted score first, then by tenant score
+    const sortedResults = scoredResults.sort((a, b) => {
+      if (a.adjustedScore !== b.adjustedScore) {
+        return b.adjustedScore - a.adjustedScore
+      }
+      return b.tenantScore - a.tenantScore
+    })
+
+    // Always show at least 3 tenants if available
+    const finalResults = sortedResults.slice(0, Math.max(3, sortedResults.length))
+
+    setSearchResults(finalResults)
     setHasSearched(true)
 
+    const matchType = exactMatches.length > 0 ? "exact matches" : "closest matches"
     toast({
       title: "Tenant Search Complete",
-      description: `Found ${sortedResults.length} matching tenants`,
+      description: `Found ${finalResults.length} ${matchType}`,
     })
   }
 
@@ -356,21 +406,21 @@ export function TenantMatching() {
               <div className="space-y-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0">
                 <div className="space-y-2">
                   <Label htmlFor="country" className="text-sm font-medium">Country *</Label>
-                  <Input id="country" {...form.register("country")} placeholder="e.g., Australia" className="text-sm" />
+                  <Input id="country" {...form.register("country")} placeholder="e.g., New Zealand" className="text-sm" />
                   {form.formState.errors.country && (
                     <p className="text-xs text-red-500">{form.formState.errors.country.message}</p>
                   )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="region" className="text-sm font-medium">Region *</Label>
-                  <Input id="region" {...form.register("region")} placeholder="e.g., Victoria" className="text-sm" />
+                  <Input id="region" {...form.register("region")} placeholder="e.g., Wellington" className="text-sm" />
                   {form.formState.errors.region && (
                     <p className="text-xs text-red-500">{form.formState.errors.region.message}</p>
                   )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="district" className="text-sm font-medium">District *</Label>
-                  <Input id="district" {...form.register("district")} placeholder="e.g., Melbourne" className="text-sm" />
+                  <Input id="district" {...form.register("district")} placeholder="e.g., Wellington City" className="text-sm" />
                   {form.formState.errors.district && (
                     <p className="text-xs text-red-500">{form.formState.errors.district.message}</p>
                   )}
@@ -380,14 +430,14 @@ export function TenantMatching() {
               <div className="space-y-4 sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0">
                 <div className="space-y-2">
                   <Label htmlFor="suburb" className="text-sm font-medium">Suburb *</Label>
-                  <Input id="suburb" {...form.register("suburb")} placeholder="e.g., Richmond" className="text-sm" />
+                  <Input id="suburb" {...form.register("suburb")} placeholder="e.g., Te Aro" className="text-sm" />
                   {form.formState.errors.suburb && (
                     <p className="text-xs text-red-500">{form.formState.errors.suburb.message}</p>
                   )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="postcode" className="text-sm font-medium">Postcode *</Label>
-                  <Input id="postcode" {...form.register("postcode")} placeholder="e.g., 3121" className="text-sm" />
+                  <Input id="postcode" {...form.register("postcode")} placeholder="e.g., 6011" className="text-sm" />
                   {form.formState.errors.postcode && (
                     <p className="text-xs text-red-500">{form.formState.errors.postcode.message}</p>
                   )}
@@ -397,7 +447,7 @@ export function TenantMatching() {
               <div className="space-y-4 sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0">
                 <div className="space-y-2">
                   <Label htmlFor="address" className="text-sm font-medium">Address *</Label>
-                  <Input id="address" {...form.register("address")} placeholder="e.g., 123 Swan Street" className="text-sm" />
+                  <Input id="address" {...form.register("address")} placeholder="e.g., 123 Courtenay Place" className="text-sm" />
                   {form.formState.errors.address && (
                     <p className="text-xs text-red-500">{form.formState.errors.address.message}</p>
                   )}
@@ -523,7 +573,7 @@ export function TenantMatching() {
                   <Input
                     id="features"
                     {...form.register("features")}
-                    placeholder="e.g., Air Conditioning, Balcony, Dishwasher"
+                    placeholder="e.g., Heat Pump, Balcony, Dishwasher"
                     className="text-sm"
                   />
                 </div>
