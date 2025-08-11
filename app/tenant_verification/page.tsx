@@ -1,12 +1,7 @@
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-} from "@/components/ui/breadcrumb"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb"
+import { TenantVerificationForm } from "@/components/tenant-verification-form"
 
 export default function TenantVerificationPage() {
   return (
@@ -24,6 +19,17 @@ export default function TenantVerificationPage() {
           </Breadcrumb>
         </div>
       </header>
+      <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div className="space-y-4">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Tenant Verification</h1>
+            <p className="text-muted-foreground">
+              Complete the form below to generate a comprehensive tenant verification report.
+            </p>
+          </div>
+          <TenantVerificationForm />
+        </div>
+      </div>
     </>
   )
 }

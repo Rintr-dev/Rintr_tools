@@ -36,8 +36,8 @@ const tools = [
     icon: UserCheck,
   },
   {
-    title: "One Way Interviews",
-    url: "/one_way_interviews",
+    title: "Personality Check",
+    url: "/personality_check",
     icon: Video,
   }
 ]

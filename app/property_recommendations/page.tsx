@@ -1,12 +1,7 @@
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-} from "@/components/ui/breadcrumb"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "@/components/ui/breadcrumb"
+import { PropertyRecommendations } from "@/components/property-recommendations"
 
 export default function PropertyRecommendationsPage() {
   return (
@@ -18,12 +13,24 @@ export default function PropertyRecommendationsPage() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbPage>Property Recommendation</BreadcrumbPage>
+                <BreadcrumbPage>Property Recommendations</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
         </div>
       </header>
+      <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div className="space-y-4">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Property Recommendations</h1>
+            <p className="text-muted-foreground">
+              Find the perfect property by setting your criteria and priorities. Our system will rank properties based
+              on your preferences.
+            </p>
+          </div>
+          <PropertyRecommendations />
+        </div>
+      </div>
     </>
   )
 }
