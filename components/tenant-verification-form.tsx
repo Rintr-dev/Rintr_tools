@@ -358,7 +358,7 @@ export function TenantVerificationForm() {
       <Card>
         <CardHeader>
           <CardTitle>Verification Permissions</CardTitle>
-          <CardDescription>Authorize various background checks</CardDescription>
+          <CardDescription>Authorise various background checks</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center space-x-2">
