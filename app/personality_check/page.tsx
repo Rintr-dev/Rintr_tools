@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/breadcrumb"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
-export default function OneWayInterviewsPage() {
+export default function PersonalityCheckPage() {
   return (
     <>
       <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
@@ -18,7 +18,7 @@ export default function OneWayInterviewsPage() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbPage>One Way Interviews</BreadcrumbPage>
+                <BreadcrumbPage>Personality Check</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
