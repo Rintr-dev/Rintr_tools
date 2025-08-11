@@ -196,212 +196,276 @@ export function TenantVerificationForm() {
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-      {/* Personal Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Personal Information</CardTitle>
-          <CardDescription>Basic details of the tenant applicant</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="firstName">First Name *</Label>
-              <Input id="firstName" {...form.register("firstName")} placeholder="Enter first name" />
-              {form.formState.errors.firstName && (
-                <p className="text-sm text-red-500">{form.formState.errors.firstName.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="middleName">Middle Name</Label>
-              <Input id="middleName" {...form.register("middleName")} placeholder="Enter middle name (optional)" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="lastName">Last Name *</Label>
-              <Input id="lastName" {...form.register("lastName")} placeholder="Enter last name" />
-              {form.formState.errors.lastName && (
-                <p className="text-sm text-red-500">{form.formState.errors.lastName.message}</p>
-              )}
-            </div>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="preferredName">Preferred/Other Names</Label>
-            <Input
-              id="preferredName"
-              {...form.register("preferredName")}
-              placeholder="Enter preferred or other names (optional)"
-            />
-          </div>
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="isOver18"
-              checked={form.watch("isOver18")}
-              onCheckedChange={(checked) => form.setValue("isOver18", checked as boolean)}
-            />
-            <Label htmlFor="isOver18">I confirm that I am over 18 years old *</Label>
-          </div>
-          {form.formState.errors.isOver18 && (
-            <p className="text-sm text-red-500">{form.formState.errors.isOver18.message}</p>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Previous Landlords */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Previous Landlords</CardTitle>
-              <CardDescription>Information about previous rental history</CardDescription>
-            </div>
-            <Button type="button" onClick={addLandlord} variant="outline" size="sm">
-              <Plus className="h-4 w-4 mr-2" />
-              Add Landlord
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {fields.map((field, index) => (
-            <div key={field.id} className="space-y-4 p-4 border rounded-lg">
-              <div className="flex items-center justify-between">
-                <h4 className="font-medium">Landlord {index + 1}</h4>
-                {fields.length > 1 && (
-                  <Button type="button" onClick={() => remove(index)} variant="outline" size="sm">
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+    <div className="space-y-4 sm:space-y-6 p-4 sm:p-0">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
+        {/* Personal Information */}
+        <Card>
+          <CardHeader className="space-y-2 pb-4">
+            <CardTitle className="text-lg sm:text-xl">Personal Information</CardTitle>
+            <CardDescription className="text-sm">Basic details of the tenant applicant</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {/* Mobile: Stack vertically, Desktop: 3-column grid */}
+            <div className="space-y-4 sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0 lg:grid-cols-3">
+              <div className="space-y-2">
+                <Label htmlFor="firstName" className="text-sm font-medium">First Name *</Label>
+                <Input 
+                  id="firstName" 
+                  {...form.register("firstName")} 
+                  placeholder="Enter first name" 
+                  className="text-sm"
+                />
+                {form.formState.errors.firstName && (
+                  <p className="text-xs text-red-500">{form.formState.errors.firstName.message}</p>
                 )}
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor={`landlord-${index}-name`}>Name *</Label>
-                  <Input
-                    id={`landlord-${index}-name`}
-                    {...form.register(`previousLandlords.${index}.name`)}
-                    placeholder="Landlord's full name"
-                  />
-                  {form.formState.errors.previousLandlords?.[index]?.name && (
-                    <p className="text-sm text-red-500">
-                      {form.formState.errors.previousLandlords[index]?.name?.message}
-                    </p>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor={`landlord-${index}-phone`}>Phone Number *</Label>
-                  <Input
-                    id={`landlord-${index}-phone`}
-                    {...form.register(`previousLandlords.${index}.phone`)}
-                    placeholder="Phone number"
-                  />
-                  {form.formState.errors.previousLandlords?.[index]?.phone && (
-                    <p className="text-sm text-red-500">
-                      {form.formState.errors.previousLandlords[index]?.phone?.message}
-                    </p>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor={`landlord-${index}-email`}>Email *</Label>
-                  <Input
-                    id={`landlord-${index}-email`}
-                    type="email"
-                    {...form.register(`previousLandlords.${index}.email`)}
-                    placeholder="Email address"
-                  />
-                  {form.formState.errors.previousLandlords?.[index]?.email && (
-                    <p className="text-sm text-red-500">
-                      {form.formState.errors.previousLandlords[index]?.email?.message}
-                    </p>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor={`landlord-${index}-period`}>Residency Period *</Label>
-                  <Input
-                    id={`landlord-${index}-period`}
-                    {...form.register(`previousLandlords.${index}.residencyPeriod`)}
-                    placeholder="e.g., Jan 2020 - Dec 2022"
-                  />
-                  {form.formState.errors.previousLandlords?.[index]?.residencyPeriod && (
-                    <p className="text-sm text-red-500">
-                      {form.formState.errors.previousLandlords[index]?.residencyPeriod?.message}
-                    </p>
-                  )}
-                </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor={`landlord-${index}-address`}>Address *</Label>
-                <Input
-                  id={`landlord-${index}-address`}
-                  {...form.register(`previousLandlords.${index}.address`)}
-                  placeholder="Full address of rental property"
+                <Label htmlFor="middleName" className="text-sm font-medium">Middle Name</Label>
+                <Input 
+                  id="middleName" 
+                  {...form.register("middleName")} 
+                  placeholder="Enter middle name (optional)" 
+                  className="text-sm"
                 />
-                {form.formState.errors.previousLandlords?.[index]?.address && (
-                  <p className="text-sm text-red-500">
-                    {form.formState.errors.previousLandlords[index]?.address?.message}
-                  </p>
+              </div>
+              <div className="space-y-2 sm:col-span-2 lg:col-span-1">
+                <Label htmlFor="lastName" className="text-sm font-medium">Last Name *</Label>
+                <Input 
+                  id="lastName" 
+                  {...form.register("lastName")} 
+                  placeholder="Enter last name" 
+                  className="text-sm"
+                />
+                {form.formState.errors.lastName && (
+                  <p className="text-xs text-red-500">{form.formState.errors.lastName.message}</p>
                 )}
               </div>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="preferredName" className="text-sm font-medium">Preferred/Other Names</Label>
+              <Input
+                id="preferredName"
+                {...form.register("preferredName")}
+                placeholder="Enter preferred or other names (optional)"
+                className="text-sm"
+              />
+            </div>
+            
+            <div className="space-y-2">
               <div className="flex items-center space-x-2">
                 <Checkbox
-                  id={`landlord-${index}-contact`}
-                  checked={form.watch(`previousLandlords.${index}.allowContact`)}
-                  onCheckedChange={(checked) =>
-                    form.setValue(`previousLandlords.${index}.allowContact`, checked as boolean)
-                  }
+                  id="isOver18"
+                  checked={form.watch("isOver18")}
+                  onCheckedChange={(checked) => form.setValue("isOver18", checked as boolean)}
                 />
-                <Label htmlFor={`landlord-${index}-contact`}>Allow contact for reference check</Label>
+                <Label htmlFor="isOver18" className="text-sm">I confirm that I am over 18 years old *</Label>
+              </div>
+              {form.formState.errors.isOver18 && (
+                <p className="text-xs text-red-500">{form.formState.errors.isOver18.message}</p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Previous Landlords */}
+        <Card>
+          <CardHeader className="space-y-2 pb-4">
+            <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+              <div className="space-y-1">
+                <CardTitle className="text-lg sm:text-xl">Previous Landlords</CardTitle>
+                <CardDescription className="text-sm">Information about previous rental history</CardDescription>
+              </div>
+              <Button type="button" onClick={addLandlord} variant="outline" size="sm" className="w-full sm:w-auto">
+                <Plus className="h-4 w-4 mr-2" />
+                Add Landlord
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4 sm:space-y-6">
+            {fields.map((field, index) => (
+              <div key={field.id} className="space-y-4 p-3 sm:p-4 border rounded-lg">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-medium text-sm sm:text-base">Landlord {index + 1}</h4>
+                  {fields.length > 1 && (
+                    <Button type="button" onClick={() => remove(index)} variant="outline" size="sm">
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  )}
+                </div>
+                
+                {/* Mobile: Stack vertically, Desktop: 2-column grid */}
+                <div className="space-y-4 sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0">
+                  <div className="space-y-2">
+                    <Label htmlFor={`landlord-${index}-name`} className="text-sm font-medium">Name *</Label>
+                    <Input
+                      id={`landlord-${index}-name`}
+                      {...form.register(`previousLandlords.${index}.name`)}
+                      placeholder="Landlord's full name"
+                      className="text-sm"
+                    />
+                    {form.formState.errors.previousLandlords?.[index]?.name && (
+                      <p className="text-xs text-red-500">
+                        {form.formState.errors.previousLandlords[index]?.name?.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`landlord-${index}-phone`} className="text-sm font-medium">Phone Number *</Label>
+                    <Input
+                      id={`landlord-${index}-phone`}
+                      {...form.register(`previousLandlords.${index}.phone`)}
+                      placeholder="Phone number"
+                      className="text-sm"
+                    />
+                    {form.formState.errors.previousLandlords?.[index]?.phone && (
+                      <p className="text-xs text-red-500">
+                        {form.formState.errors.previousLandlords[index]?.phone?.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`landlord-${index}-email`} className="text-sm font-medium">Email *</Label>
+                    <Input
+                      id={`landlord-${index}-email`}
+                      type="email"
+                      {...form.register(`previousLandlords.${index}.email`)}
+                      placeholder="Email address"
+                      className="text-sm"
+                    />
+                    {form.formState.errors.previousLandlords?.[index]?.email && (
+                      <p className="text-xs text-red-500">
+                        {form.formState.errors.previousLandlords[index]?.email?.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`landlord-${index}-period`} className="text-sm font-medium">Residency Period *</Label>
+                    <Input
+                      id={`landlord-${index}-period`}
+                      {...form.register(`previousLandlords.${index}.residencyPeriod`)}
+                      placeholder="e.g., Jan 2020 - Dec 2022"
+                      className="text-sm"
+                    />
+                    {form.formState.errors.previousLandlords?.[index]?.residencyPeriod && (
+                      <p className="text-xs text-red-500">
+                        {form.formState.errors.previousLandlords[index]?.residencyPeriod?.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor={`landlord-${index}-address`} className="text-sm font-medium">Address *</Label>
+                  <Input
+                    id={`landlord-${index}-address`}
+                    {...form.register(`previousLandlords.${index}.address`)}
+                    placeholder="Full address of rental property"
+                    className="text-sm"
+                  />
+                  {form.formState.errors.previousLandlords?.[index]?.address && (
+                    <p className="text-xs text-red-500">
+                      {form.formState.errors.previousLandlords[index]?.address?.message}
+                    </p>
+                  )}
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id={`landlord-${index}-contact`}
+                    checked={form.watch(`previousLandlords.${index}.allowContact`)}
+                    onCheckedChange={(checked) =>
+                      form.setValue(`previousLandlords.${index}.allowContact`, checked as boolean)
+                    }
+                  />
+                  <Label htmlFor={`landlord-${index}-contact`} className="text-sm">Allow contact for reference check</Label>
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        {/* Verification Permissions */}
+        <Card>
+          <CardHeader className="space-y-2 pb-4">
+            <CardTitle className="text-lg sm:text-xl">Verification Permissions</CardTitle>
+            <CardDescription className="text-sm">Authorise various background checks</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-4">
+              <div className="flex items-start space-x-2">
+                <Checkbox
+                  id="allowCriminalCheck"
+                  checked={form.watch("allowCriminalCheck")}
+                  onCheckedChange={(checked) => form.setValue("allowCriminalCheck", checked as boolean)}
+                  className="mt-0.5"
+                />
+                <div className="space-y-1">
+                  <Label htmlFor="allowCriminalCheck" className="text-sm font-medium leading-none">
+                    Allow criminal history check
+                  </Label>
+                  <p className="text-xs text-muted-foreground">
+                    Authorize verification of criminal background records
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-start space-x-2">
+                <Checkbox
+                  id="allowCreditCheck"
+                  checked={form.watch("allowCreditCheck")}
+                  onCheckedChange={(checked) => form.setValue("allowCreditCheck", checked as boolean)}
+                  className="mt-0.5"
+                />
+                <div className="space-y-1">
+                  <Label htmlFor="allowCreditCheck" className="text-sm font-medium leading-none">
+                    Allow credit history check
+                  </Label>
+                  <p className="text-xs text-muted-foreground">
+                    Authorize verification of credit score and financial history
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-start space-x-2">
+                <Checkbox
+                  id="allowIdVerification"
+                  checked={form.watch("allowIdVerification")}
+                  onCheckedChange={(checked) => form.setValue("allowIdVerification", checked as boolean)}
+                  className="mt-0.5"
+                />
+                <div className="space-y-1">
+                  <Label htmlFor="allowIdVerification" className="text-sm font-medium leading-none">
+                    Allow ID verification check
+                  </Label>
+                  <p className="text-xs text-muted-foreground">
+                    Authorize verification of identity documents and personal details
+                  </p>
+                </div>
               </div>
             </div>
-          ))}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
 
-      {/* Verification Permissions */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Verification Permissions</CardTitle>
-          <CardDescription>Authorise various background checks</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="allowCriminalCheck"
-              checked={form.watch("allowCriminalCheck")}
-              onCheckedChange={(checked) => form.setValue("allowCriminalCheck", checked as boolean)}
-            />
-            <Label htmlFor="allowCriminalCheck">Allow criminal history check</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="allowCreditCheck"
-              checked={form.watch("allowCreditCheck")}
-              onCheckedChange={(checked) => form.setValue("allowCreditCheck", checked as boolean)}
-            />
-            <Label htmlFor="allowCreditCheck">Allow credit history check</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="allowIdVerification"
-              checked={form.watch("allowIdVerification")}
-              onCheckedChange={(checked) => form.setValue("allowIdVerification", checked as boolean)}
-            />
-            <Label htmlFor="allowIdVerification">Allow ID verification check</Label>
-          </div>
-        </CardContent>
-      </Card>
+        <Separator />
 
-      <Separator />
-
-      <div className="flex justify-end">
-        <Button type="submit" disabled={isGenerating} className="min-w-[200px]">
-          {isGenerating ? (
-            "Generating Report..."
-          ) : (
-            <>
-              <Download className="h-4 w-4 mr-2" />
-              Generate PDF Report
-            </>
-          )}
-        </Button>
-      </div>
-    </form>
+        <div className="flex justify-end">
+          <Button 
+            type="submit" 
+            disabled={isGenerating} 
+            className="w-full sm:min-w-[200px] sm:w-auto"
+          >
+            {isGenerating ? (
+              "Generating Report..."
+            ) : (
+              <>
+                <Download className="h-4 w-4 mr-2" />
+                Generate PDF Report
+              </>
+            )}
+          </Button>
+        </div>
+      </form>
+    </div>
   )
 }

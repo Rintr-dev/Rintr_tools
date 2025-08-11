@@ -230,104 +230,109 @@ export function TenantMatching() {
 
   const TenantCard = ({ tenant }: { tenant: (typeof mockTenants)[0] }) => (
     <Card className="w-full">
-      <CardHeader>
-        <div className="flex justify-between items-start">
-          <div>
-            <CardTitle className="flex items-center gap-2">
-              <User className="h-5 w-5" />
-              {tenant.firstName} {tenant.lastName}
+      <CardHeader className="space-y-2 pb-4">
+        <div className="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-start sm:space-y-0">
+          <div className="space-y-1">
+            <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+              <User className="h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="break-words">{tenant.firstName} {tenant.lastName}</span>
             </CardTitle>
-            <CardDescription className="flex items-center gap-1 mt-1">
-              <span>
-                {tenant.occupation}, {tenant.age} years old
-              </span>
+            <CardDescription className="text-xs sm:text-sm">
+              {tenant.occupation}, {tenant.age} years old
             </CardDescription>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 self-start">
             <Star className="h-4 w-4 fill-green-400 text-green-400" />
-            <span className="font-semibold">{tenant.matchScore}%</span>
+            <span className="font-semibold text-sm">{tenant.matchScore}%</span>
           </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-          <div className="flex items-center gap-2">
-            <Mail className="h-4 w-4" />
-            <span>{tenant.email}</span>
+        {/* Contact Information - Mobile: Stack vertically */}
+        <div className="space-y-2 sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0">
+          <div className="flex items-center gap-2 text-xs sm:text-sm">
+            <Mail className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="break-all">{tenant.email}</span>
           </div>
-          <div className="flex items-center gap-2">
-            <Phone className="h-4 w-4" />
+          <div className="flex items-center gap-2 text-xs sm:text-sm">
+            <Phone className="h-3 w-3 sm:h-4 sm:w-4" />
             <span>{tenant.phone}</span>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-          <div className="flex items-center gap-2">
-            <DollarSign className="h-4 w-4" />
+        {/* Financial Information - Mobile: Stack vertically */}
+        <div className="space-y-2 sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0 lg:grid-cols-4">
+          <div className="flex items-center gap-2 text-xs sm:text-sm">
+            <DollarSign className="h-3 w-3 sm:h-4 sm:w-4" />
             <span>${tenant.income.toLocaleString()}/year</span>
           </div>
-          <div>
+          <div className="text-xs sm:text-sm">
             <span className="font-medium">Budget:</span> ${tenant.maxBudget}/week
           </div>
-          <div>
+          <div className="text-xs sm:text-sm">
             <span className="font-medium">Credit:</span> {tenant.creditScore}
           </div>
-          <div>
+          <div className="text-xs sm:text-sm">
             <span className="font-medium">Score:</span> {tenant.tenantScore}/100
           </div>
         </div>
 
+        {/* Availability & Location */}
         <div className="space-y-2">
-          <div className="flex items-center gap-2 text-sm">
-            <Calendar className="h-4 w-4" />
+          <div className="flex items-center gap-2 text-xs sm:text-sm">
+            <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
             <span>Available from {tenant.availableFrom}</span>
           </div>
-          <div className="flex items-center gap-2 text-sm">
-            <MapPin className="h-4 w-4" />
-            <span>Preferred: {tenant.preferredLocation.join(", ")}</span>
+          <div className="flex items-center gap-2 text-xs sm:text-sm">
+            <MapPin className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="break-words">Preferred: {tenant.preferredLocation.join(", ")}</span>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
-          <div>
+        {/* Requirements - Mobile: Stack vertically */}
+        <div className="space-y-2 sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0 lg:grid-cols-4">
+          <div className="text-xs sm:text-sm">
             <span className="font-medium">Min Bed:</span> {tenant.minBedrooms}
           </div>
-          <div>
+          <div className="text-xs sm:text-sm">
             <span className="font-medium">Min Bath:</span> {tenant.minBathrooms}
           </div>
-          <div>
+          <div className="text-xs sm:text-sm">
             <span className="font-medium">Parking:</span> {tenant.needsParking ? "Required" : "Not needed"}
           </div>
-          <div>
+          <div className="text-xs sm:text-sm">
             <span className="font-medium">Lease:</span> {tenant.preferredLease}
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          <Badge variant="secondary">{tenant.employmentStatus}</Badge>
-          <Badge variant="secondary">{tenant.smokingStatus}</Badge>
-          {tenant.hasPets && <Badge variant="outline">Has Pets</Badge>}
-          <Badge variant="outline">{tenant.references} References</Badge>
-          <Badge variant="outline">{tenant.previousRentals} Previous Rentals</Badge>
+        {/* Badges - Better mobile wrapping */}
+        <div className="flex flex-wrap gap-1 sm:gap-2">
+          <Badge variant="secondary" className="text-xs">{tenant.employmentStatus}</Badge>
+          <Badge variant="secondary" className="text-xs">{tenant.smokingStatus}</Badge>
+          {tenant.hasPets && <Badge variant="outline" className="text-xs">Has Pets</Badge>}
+          <Badge variant="outline" className="text-xs">{tenant.references} References</Badge>
+          <Badge variant="outline" className="text-xs">{tenant.previousRentals} Previous Rentals</Badge>
         </div>
 
+        {/* Notes */}
         {tenant.notes && (
           <div className="space-y-2">
-            <Label className="text-sm font-medium">Notes</Label>
-            <p className="text-sm text-muted-foreground bg-muted p-2 rounded">{tenant.notes}</p>
+            <Label className="text-xs sm:text-sm font-medium">Notes</Label>
+            <p className="text-xs sm:text-sm text-muted-foreground bg-muted p-2 rounded">{tenant.notes}</p>
           </div>
         )}
 
-        <div className="flex gap-2 pt-2">
-          <Button size="sm" className="flex-1">
+        {/* Action Buttons - Mobile: Stack vertically */}
+        <div className="flex flex-col space-y-2 sm:flex-row sm:gap-2 sm:space-y-0">
+          <Button size="sm" className="w-full sm:flex-1">
             <Mail className="h-4 w-4 mr-2" />
             Contact
           </Button>
-          <Button size="sm" variant="outline" className="flex-1 bg-transparent">
+          <Button size="sm" variant="outline" className="w-full sm:flex-1">
             <User className="h-4 w-4 mr-2" />
             View Profile
           </Button>
-          <Button size="sm" variant="outline">
+          <Button size="sm" variant="outline" className="w-full sm:w-auto">
             <Heart className="h-4 w-4" />
           </Button>
         </div>
@@ -336,70 +341,70 @@ export function TenantMatching() {
   )
 
   return (
-    <div className="space-y-6">
-      <form onSubmit={form.handleSubmit(searchTenants)} className="space-y-6">
+    <div className="space-y-4 sm:space-y-6 p-4 sm:p-0">
+      <form onSubmit={form.handleSubmit(searchTenants)} className="space-y-4 sm:space-y-6">
         {/* Property Details */}
         <Card>
-          <CardHeader>
-            <CardTitle>Property Details</CardTitle>
-            <CardDescription>Enter your property information to find the best matching tenants</CardDescription>
+          <CardHeader className="space-y-2 pb-4">
+            <CardTitle className="text-lg sm:text-xl">Property Details</CardTitle>
+            <CardDescription className="text-sm">Enter your property information to find the best matching tenants</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Location Information */}
             <div className="space-y-4">
-              <h4 className="font-medium">Location Information</h4>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <h4 className="font-medium text-sm sm:text-base">Location Information</h4>
+              <div className="space-y-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0">
                 <div className="space-y-2">
-                  <Label htmlFor="country">Country *</Label>
-                  <Input id="country" {...form.register("country")} placeholder="e.g., Australia" />
+                  <Label htmlFor="country" className="text-sm font-medium">Country *</Label>
+                  <Input id="country" {...form.register("country")} placeholder="e.g., Australia" className="text-sm" />
                   {form.formState.errors.country && (
-                    <p className="text-sm text-red-500">{form.formState.errors.country.message}</p>
+                    <p className="text-xs text-red-500">{form.formState.errors.country.message}</p>
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="region">Region *</Label>
-                  <Input id="region" {...form.register("region")} placeholder="e.g., Victoria" />
+                  <Label htmlFor="region" className="text-sm font-medium">Region *</Label>
+                  <Input id="region" {...form.register("region")} placeholder="e.g., Victoria" className="text-sm" />
                   {form.formState.errors.region && (
-                    <p className="text-sm text-red-500">{form.formState.errors.region.message}</p>
+                    <p className="text-xs text-red-500">{form.formState.errors.region.message}</p>
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="district">District *</Label>
-                  <Input id="district" {...form.register("district")} placeholder="e.g., Melbourne" />
+                  <Label htmlFor="district" className="text-sm font-medium">District *</Label>
+                  <Input id="district" {...form.register("district")} placeholder="e.g., Melbourne" className="text-sm" />
                   {form.formState.errors.district && (
-                    <p className="text-sm text-red-500">{form.formState.errors.district.message}</p>
+                    <p className="text-xs text-red-500">{form.formState.errors.district.message}</p>
                   )}
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-4 sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0">
                 <div className="space-y-2">
-                  <Label htmlFor="suburb">Suburb *</Label>
-                  <Input id="suburb" {...form.register("suburb")} placeholder="e.g., Richmond" />
+                  <Label htmlFor="suburb" className="text-sm font-medium">Suburb *</Label>
+                  <Input id="suburb" {...form.register("suburb")} placeholder="e.g., Richmond" className="text-sm" />
                   {form.formState.errors.suburb && (
-                    <p className="text-sm text-red-500">{form.formState.errors.suburb.message}</p>
+                    <p className="text-xs text-red-500">{form.formState.errors.suburb.message}</p>
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="postcode">Postcode *</Label>
-                  <Input id="postcode" {...form.register("postcode")} placeholder="e.g., 3121" />
+                  <Label htmlFor="postcode" className="text-sm font-medium">Postcode *</Label>
+                  <Input id="postcode" {...form.register("postcode")} placeholder="e.g., 3121" className="text-sm" />
                   {form.formState.errors.postcode && (
-                    <p className="text-sm text-red-500">{form.formState.errors.postcode.message}</p>
+                    <p className="text-xs text-red-500">{form.formState.errors.postcode.message}</p>
                   )}
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-4 sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0">
                 <div className="space-y-2">
-                  <Label htmlFor="address">Address *</Label>
-                  <Input id="address" {...form.register("address")} placeholder="e.g., 123 Swan Street" />
+                  <Label htmlFor="address" className="text-sm font-medium">Address *</Label>
+                  <Input id="address" {...form.register("address")} placeholder="e.g., 123 Swan Street" className="text-sm" />
                   {form.formState.errors.address && (
-                    <p className="text-sm text-red-500">{form.formState.errors.address.message}</p>
+                    <p className="text-xs text-red-500">{form.formState.errors.address.message}</p>
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="apartmentCode">Apartment Code</Label>
-                  <Input id="apartmentCode" {...form.register("apartmentCode")} placeholder="e.g., 12A (optional)" />
+                  <Label htmlFor="apartmentCode" className="text-sm font-medium">Apartment Code</Label>
+                  <Input id="apartmentCode" {...form.register("apartmentCode")} placeholder="e.g., 12A (optional)" className="text-sm" />
                 </div>
               </div>
             </div>
@@ -408,96 +413,101 @@ export function TenantMatching() {
 
             {/* Property Details */}
             <div className="space-y-4">
-              <h4 className="font-medium">Property Details</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <h4 className="font-medium text-sm sm:text-base">Property Details</h4>
+              <div className="space-y-4 sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0">
                 <div className="space-y-2">
-                  <Label htmlFor="propertyType">Property Type *</Label>
+                  <Label htmlFor="propertyType" className="text-sm font-medium">Property Type *</Label>
                   <Select onValueChange={(value) => form.setValue("propertyType", value)}>
-                    <SelectTrigger>
+                    <SelectTrigger className="text-sm">
                       <SelectValue placeholder="Select property type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="apartment">Apartment</SelectItem>
-                      <SelectItem value="house">House</SelectItem>
-                      <SelectItem value="townhouse">Townhouse</SelectItem>
-                      <SelectItem value="studio">Studio</SelectItem>
+                      <SelectItem value="apartment" className="text-sm">Apartment</SelectItem>
+                      <SelectItem value="house" className="text-sm">House</SelectItem>
+                      <SelectItem value="townhouse" className="text-sm">Townhouse</SelectItem>
+                      <SelectItem value="studio" className="text-sm">Studio</SelectItem>
                     </SelectContent>
                   </Select>
                   {form.formState.errors.propertyType && (
-                    <p className="text-sm text-red-500">{form.formState.errors.propertyType.message}</p>
+                    <p className="text-xs text-red-500">{form.formState.errors.propertyType.message}</p>
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="availableFrom">Available From *</Label>
-                  <Input id="availableFrom" {...form.register("availableFrom")} placeholder="DD-MM-YYYY" />
+                  <Label htmlFor="availableFrom" className="text-sm font-medium">Available From *</Label>
+                  <Input id="availableFrom" {...form.register("availableFrom")} placeholder="DD-MM-YYYY" className="text-sm" />
                   {form.formState.errors.availableFrom && (
-                    <p className="text-sm text-red-500">{form.formState.errors.availableFrom.message}</p>
+                    <p className="text-xs text-red-500">{form.formState.errors.availableFrom.message}</p>
                   )}
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="space-y-4 sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0 lg:grid-cols-4">
                 <div className="space-y-2">
-                  <Label htmlFor="pricePerWeek">Price per Week *</Label>
+                  <Label htmlFor="pricePerWeek" className="text-sm font-medium">Price per Week *</Label>
                   <Input
                     id="pricePerWeek"
                     type="number"
                     {...form.register("pricePerWeek", { valueAsNumber: true })}
                     placeholder="450"
+                    className="text-sm"
                   />
                   {form.formState.errors.pricePerWeek && (
-                    <p className="text-sm text-red-500">{form.formState.errors.pricePerWeek.message}</p>
+                    <p className="text-xs text-red-500">{form.formState.errors.pricePerWeek.message}</p>
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="bondAmount">Bond Amount *</Label>
+                  <Label htmlFor="bondAmount" className="text-sm font-medium">Bond Amount *</Label>
                   <Input
                     id="bondAmount"
                     type="number"
                     {...form.register("bondAmount", { valueAsNumber: true })}
                     placeholder="1800"
+                    className="text-sm"
                   />
                   {form.formState.errors.bondAmount && (
-                    <p className="text-sm text-red-500">{form.formState.errors.bondAmount.message}</p>
+                    <p className="text-xs text-red-500">{form.formState.errors.bondAmount.message}</p>
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="bedrooms">Bedrooms</Label>
+                  <Label htmlFor="bedrooms" className="text-sm font-medium">Bedrooms</Label>
                   <Input
                     id="bedrooms"
                     type="number"
                     {...form.register("bedrooms", { valueAsNumber: true })}
                     placeholder="2"
+                    className="text-sm"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="bathrooms">Bathrooms</Label>
+                  <Label htmlFor="bathrooms" className="text-sm font-medium">Bathrooms</Label>
                   <Input
                     id="bathrooms"
                     type="number"
                     {...form.register("bathrooms", { valueAsNumber: true })}
                     placeholder="1"
+                    className="text-sm"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-4 sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0">
                 <div className="space-y-2">
-                  <Label htmlFor="carSpaces">Car Spaces</Label>
+                  <Label htmlFor="carSpaces" className="text-sm font-medium">Car Spaces</Label>
                   <Input
                     id="carSpaces"
                     type="number"
                     {...form.register("carSpaces", { valueAsNumber: true })}
                     placeholder="1"
+                    className="text-sm"
                   />
                 </div>
-                <div className="flex items-center space-x-2 pt-8">
+                <div className="flex items-center space-x-2 pt-6">
                   <Checkbox
                     id="petsAllowed"
                     checked={form.watch("petsAllowed")}
                     onCheckedChange={(checked) => form.setValue("petsAllowed", checked as boolean)}
                   />
-                  <Label htmlFor="petsAllowed">Pets Allowed</Label>
+                  <Label htmlFor="petsAllowed" className="text-sm">Pets Allowed</Label>
                 </div>
               </div>
             </div>
@@ -506,23 +516,25 @@ export function TenantMatching() {
 
             {/* Additional Information */}
             <div className="space-y-4">
-              <h4 className="font-medium">Additional Information</h4>
+              <h4 className="font-medium text-sm sm:text-base">Additional Information</h4>
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="features">Features</Label>
+                  <Label htmlFor="features" className="text-sm font-medium">Features</Label>
                   <Input
                     id="features"
                     {...form.register("features")}
-                    placeholder="e.g., Air Conditioning, Balcony, Dishwasher, Built-in Wardrobes"
+                    placeholder="e.g., Air Conditioning, Balcony, Dishwasher"
+                    className="text-sm"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="description">Property Description</Label>
+                  <Label htmlFor="description" className="text-sm font-medium">Property Description</Label>
                   <Textarea
                     id="description"
                     {...form.register("description")}
                     placeholder="Describe your property, its unique features, and what makes it special..."
                     rows={3}
+                    className="text-sm resize-none"
                   />
                 </div>
               </div>
@@ -531,7 +543,7 @@ export function TenantMatching() {
         </Card>
 
         <div className="flex justify-end">
-          <Button type="submit" className="min-w-[200px]">
+          <Button type="submit" className="w-full sm:min-w-[200px] sm:w-auto">
             <Search className="h-4 w-4 mr-2" />
             Find Matching Tenants
           </Button>
@@ -543,13 +555,13 @@ export function TenantMatching() {
         <>
           <Separator />
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold">Matching Tenants</h2>
-              <Badge variant="secondary">{searchResults.length} tenants found</Badge>
+            <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+              <h2 className="text-xl sm:text-2xl font-bold">Matching Tenants</h2>
+              <Badge variant="secondary" className="text-xs self-start">{searchResults.length} tenants found</Badge>
             </div>
 
             {searchResults.length > 0 ? (
-              <div className="grid gap-6">
+              <div className="grid gap-4 sm:gap-6">
                 {searchResults.map((tenant) => (
                   <TenantCard key={tenant.id} tenant={tenant} />
                 ))}
@@ -559,8 +571,8 @@ export function TenantMatching() {
                 <CardContent className="flex items-center justify-center py-12">
                   <div className="text-center space-y-2">
                     <User className="h-12 w-12 mx-auto text-muted-foreground" />
-                    <h3 className="text-lg font-medium">No matching tenants found</h3>
-                    <p className="text-muted-foreground">
+                    <h3 className="text-base sm:text-lg font-medium">No matching tenants found</h3>
+                    <p className="text-muted-foreground text-sm">
                       Try adjusting your property criteria or check back later for new tenant applications
                     </p>
                   </div>

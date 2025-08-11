@@ -249,54 +249,54 @@ export function PropertyRecommendations() {
 
   const PropertyCard = ({ listing }: { listing: (typeof mockListings)[0] }) => (
     <Card className="w-full">
-      <CardHeader>
-        <div className="flex justify-between items-start">
-          <div>
-            <CardTitle className="flex items-center gap-2">
-              <Home className="h-5 w-5" />
-              {listing.address}
+      <CardHeader className="space-y-2 pb-4">
+        <div className="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-start sm:space-y-0">
+          <div className="space-y-1">
+            <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+              <Home className="h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="break-words">{listing.address}</span>
             </CardTitle>
-            <CardDescription className="flex items-center gap-1 mt-1">
-              <MapPin className="h-4 w-4" />
-              {listing.suburb}, {listing.district}, {listing.region}
+            <CardDescription className="flex items-center gap-1 text-xs sm:text-sm">
+              <MapPin className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="break-words">{listing.suburb}, {listing.district}, {listing.region}</span>
             </CardDescription>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 self-start">
             <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-            <span className="font-semibold">{listing.score}%</span>
+            <span className="font-semibold text-sm">{listing.score}%</span>
           </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
           <div className="flex items-center gap-2">
             <DollarSign className="h-4 w-4" />
-            <span>${listing.pricePerWeek}/week</span>
+            <span className="text-xs sm:text-sm">${listing.pricePerWeek}/week</span>
           </div>
-          <div>
+          <div className="text-xs sm:text-sm">
             <span className="font-medium">{listing.bedrooms}</span> bed
           </div>
-          <div>
+          <div className="text-xs sm:text-sm">
             <span className="font-medium">{listing.bathrooms}</span> bath
           </div>
-          <div>
+          <div className="text-xs sm:text-sm">
             <span className="font-medium">{listing.carSpaces}</span> car
           </div>
         </div>
 
         <div className="space-y-2">
-          <div className="flex items-center gap-2 text-sm">
-            <Calendar className="h-4 w-4" />
+          <div className="flex items-center gap-2 text-xs sm:text-sm">
+            <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
             <span>Available from {listing.availableFrom}</span>
           </div>
-          <div className="flex items-center gap-2 text-sm">
+          <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:gap-2 sm:space-y-0 text-xs sm:text-sm">
             <span>Bond: ${listing.bondAmount}</span>
-            {listing.petsAllowed && <Badge variant="secondary">Pets OK</Badge>}
+            {listing.petsAllowed && <Badge variant="secondary" className="text-xs self-start">Pets OK</Badge>}
           </div>
         </div>
 
         <div className="space-y-2">
-          <Label className="text-sm font-medium">Features</Label>
+          <Label className="text-xs sm:text-sm font-medium">Features</Label>
           <div className="flex flex-wrap gap-1">
             {listing.features.map((feature, index) => (
               <Badge key={index} variant="outline" className="text-xs">
@@ -310,27 +310,27 @@ export function PropertyRecommendations() {
   )
 
   return (
-    <div className="space-y-6">
-      <form onSubmit={form.handleSubmit(searchProperties)} className="space-y-6">
+    <div className="space-y-4 sm:space-y-6 p-4 sm:p-0">
+      <form onSubmit={form.handleSubmit(searchProperties)} className="space-y-4 sm:space-y-6">
         {/* Property Criteria */}
         <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle>Property Search Criteria</CardTitle>
-                <CardDescription>Add multiple property preferences to find the best matches</CardDescription>
+          <CardHeader className="space-y-2 pb-4">
+            <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+              <div className="space-y-1">
+                <CardTitle className="text-lg sm:text-xl">Property Search Criteria</CardTitle>
+                <CardDescription className="text-sm">Add multiple property preferences to find the best matches</CardDescription>
               </div>
-              <Button type="button" onClick={addProperty} variant="outline" size="sm">
+              <Button type="button" onClick={addProperty} variant="outline" size="sm" className="w-full sm:w-auto">
                 <Plus className="h-4 w-4 mr-2" />
                 Add Property
               </Button>
             </div>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-4 sm:space-y-6">
             {fields.map((field, index) => (
-              <div key={field.id} className="space-y-4 p-4 border rounded-lg">
+              <div key={field.id} className="space-y-4 p-3 sm:p-4 border rounded-lg">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-medium">Property {index + 1}</h4>
+                  <h4 className="font-medium text-sm sm:text-base">Property {index + 1}</h4>
                   {fields.length > 1 && (
                     <Button type="button" onClick={() => remove(index)} variant="outline" size="sm">
                       <Trash2 className="h-4 w-4" />
@@ -338,97 +338,102 @@ export function PropertyRecommendations() {
                   )}
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0">
                   <div className="space-y-2">
-                    <Label>Country</Label>
-                    <Input {...form.register(`properties.${index}.country`)} placeholder="e.g., Australia" />
+                    <Label className="text-sm font-medium">Country</Label>
+                    <Input {...form.register(`properties.${index}.country`)} placeholder="e.g., Australia" className="text-sm" />
                   </div>
                   <div className="space-y-2">
-                    <Label>Region</Label>
-                    <Input {...form.register(`properties.${index}.region`)} placeholder="e.g., Victoria" />
+                    <Label className="text-sm font-medium">Region</Label>
+                    <Input {...form.register(`properties.${index}.region`)} placeholder="e.g., Victoria" className="text-sm" />
                   </div>
                   <div className="space-y-2">
-                    <Label>District</Label>
-                    <Input {...form.register(`properties.${index}.district`)} placeholder="e.g., Melbourne" />
+                    <Label className="text-sm font-medium">District</Label>
+                    <Input {...form.register(`properties.${index}.district`)} placeholder="e.g., Melbourne" className="text-sm" />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-4 sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0">
                   <div className="space-y-2">
-                    <Label>Suburb</Label>
-                    <Input {...form.register(`properties.${index}.suburb`)} placeholder="e.g., Richmond" />
+                    <Label className="text-sm font-medium">Suburb</Label>
+                    <Input {...form.register(`properties.${index}.suburb`)} placeholder="e.g., Richmond" className="text-sm" />
                   </div>
                   <div className="space-y-2">
-                    <Label>Property Type</Label>
+                    <Label className="text-sm font-medium">Property Type</Label>
                     <Select onValueChange={(value) => form.setValue(`properties.${index}.propertyType`, value)}>
-                      <SelectTrigger>
+                      <SelectTrigger className="text-sm">
                         <SelectValue placeholder="Select property type" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="apartment">Apartment</SelectItem>
-                        <SelectItem value="house">House</SelectItem>
-                        <SelectItem value="townhouse">Townhouse</SelectItem>
-                        <SelectItem value="studio">Studio</SelectItem>
+                        <SelectItem value="apartment" className="text-sm">Apartment</SelectItem>
+                        <SelectItem value="house" className="text-sm">House</SelectItem>
+                        <SelectItem value="townhouse" className="text-sm">Townhouse</SelectItem>
+                        <SelectItem value="studio" className="text-sm">Studio</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="space-y-4 sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0 lg:grid-cols-4">
                   <div className="space-y-2">
-                    <Label>Min Price/Week</Label>
+                    <Label className="text-sm font-medium">Min Price/Week</Label>
                     <Input
                       type="number"
                       {...form.register(`properties.${index}.minPrice`, { valueAsNumber: true })}
                       placeholder="0"
+                      className="text-sm"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Max Price/Week</Label>
+                    <Label className="text-sm font-medium">Max Price/Week</Label>
                     <Input
                       type="number"
                       {...form.register(`properties.${index}.maxPrice`, { valueAsNumber: true })}
                       placeholder="1000"
+                      className="text-sm"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Bedrooms</Label>
+                    <Label className="text-sm font-medium">Bedrooms</Label>
                     <Input
                       type="number"
                       {...form.register(`properties.${index}.bedrooms`, { valueAsNumber: true })}
                       placeholder="1"
+                      className="text-sm"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Bathrooms</Label>
+                    <Label className="text-sm font-medium">Bathrooms</Label>
                     <Input
                       type="number"
                       {...form.register(`properties.${index}.bathrooms`, { valueAsNumber: true })}
                       placeholder="1"
+                      className="text-sm"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-4 sm:grid sm:grid-cols-2 sm:gap-4 sm:space-y-0">
                   <div className="space-y-2">
-                    <Label>Car Spaces</Label>
+                    <Label className="text-sm font-medium">Car Spaces</Label>
                     <Input
                       type="number"
                       {...form.register(`properties.${index}.carSpaces`, { valueAsNumber: true })}
                       placeholder="0"
+                      className="text-sm"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Pets Allowed</Label>
+                    <Label className="text-sm font-medium">Pets Allowed</Label>
                     <Select
                       onValueChange={(value) => form.setValue(`properties.${index}.petsAllowed`, value === "true")}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="text-sm">
                         <SelectValue placeholder="Select preference" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="false">No Preference</SelectItem>
-                        <SelectItem value="true">Pets Required</SelectItem>
+                        <SelectItem value="false" className="text-sm">No Preference</SelectItem>
+                        <SelectItem value="true" className="text-sm">Pets Required</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -440,9 +445,9 @@ export function PropertyRecommendations() {
 
         {/* Priority Ranking */}
         <Card>
-          <CardHeader>
-            <CardTitle>Priority Ranking</CardTitle>
-            <CardDescription>Drag and drop to arrange your priorities from most to least important</CardDescription>
+          <CardHeader className="space-y-2 pb-4">
+            <CardTitle className="text-lg sm:text-xl">Priority Ranking</CardTitle>
+            <CardDescription className="text-sm">Drag and drop to arrange your priorities from most to least important</CardDescription>
           </CardHeader>
           <CardContent>
             <DragDropContext onDragEnd={handleDragEnd}>
@@ -460,8 +465,8 @@ export function PropertyRecommendations() {
                               {...provided.dragHandleProps}
                               className="flex items-center gap-3 p-3 bg-muted rounded-lg cursor-move"
                             >
-                              <span className="font-medium text-sm w-6">{index + 1}.</span>
-                              <span>{priority?.label}</span>
+                              <span className="font-medium text-xs sm:text-sm w-6">{index + 1}.</span>
+                              <span className="text-xs sm:text-sm">{priority?.label}</span>
                             </div>
                           )}
                         </Draggable>
@@ -476,7 +481,7 @@ export function PropertyRecommendations() {
         </Card>
 
         <div className="flex justify-end">
-          <Button type="submit" className="min-w-[200px]">
+          <Button type="submit" className="w-full sm:min-w-[200px] sm:w-auto">
             <Search className="h-4 w-4 mr-2" />
             Search Properties
           </Button>
@@ -488,13 +493,13 @@ export function PropertyRecommendations() {
         <>
           <Separator />
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold">Closest Matches</h2>
-              <Badge variant="secondary">{searchResults.length} results found</Badge>
+            <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+              <h2 className="text-xl sm:text-2xl font-bold">Closest Matches</h2>
+              <Badge variant="secondary" className="text-xs self-start">{searchResults.length} results found</Badge>
             </div>
 
             {searchResults.length > 0 ? (
-              <div className="grid gap-6">
+              <div className="grid gap-4 sm:gap-6">
                 {searchResults.map((listing) => (
                   <PropertyCard key={listing.id} listing={listing} />
                 ))}
@@ -504,8 +509,8 @@ export function PropertyRecommendations() {
                 <CardContent className="flex items-center justify-center py-12">
                   <div className="text-center space-y-2">
                     <Home className="h-12 w-12 mx-auto text-muted-foreground" />
-                    <h3 className="text-lg font-medium">No properties found</h3>
-                    <p className="text-muted-foreground">Try adjusting your search criteria or priorities</p>
+                    <h3 className="text-base sm:text-lg font-medium">No properties found</h3>
+                    <p className="text-muted-foreground text-sm">Try adjusting your search criteria or priorities</p>
                   </div>
                 </CardContent>
               </Card>
